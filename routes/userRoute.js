@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const users = require('../repositories/userRepository.js');
+const users = require('../repository/userRepository.js');
 
 router.get('/all', (req, res) => {
     users.getUsers()
