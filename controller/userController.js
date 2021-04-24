@@ -38,10 +38,15 @@ class UserController {
         const user = await this.getUserById(id);
         const saltedPassword = await functions.saltPassword(password);
         if (user) {
-            if (user.rows.user_name !== username) {
-                return await users.updateUserAndUsername({username, saltedPassword, email, id});
+            if (user.rows[0].user_name !== username) {
+                console.log('flag', user.rows[0].user_name,'flag2', username);
+                const userUpdate = await users.updateUserAndUsername({username, saltedPassword, email, id});
+                console.log(userUpdate);
+                return userUpdate;
             } else {
-                return await users.updateUser({saltedPassword, email, id});
+                const userUpdate = await users.updateUser({saltedPassword, email, id});
+                console.log(userUpdate);
+                return userUpdate;
             }
         } else {
             return null;

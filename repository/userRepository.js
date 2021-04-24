@@ -16,8 +16,12 @@ const createUser = ({username, saltedPassword, email}) => {
     return db.query('INSERT INTO users (user_name, password, user_email) VALUES ($1, $2, $3) RETURNING user_id', [username, saltedPassword, email]);
 };
 
-const updateUser = ({username, saltedPassword, email, id}) => {
+const updateUserAndUsername = ({username, saltedPassword, email, id}) => {
     return db.query('UPDATE users SET user_name = $1, password = $2, user_email = $3 WHERE user_id = $4', [username, saltedPassword, email, id]);
+};
+
+const updateUser = ({saltedPassword, email, id}) => {
+    return db.query('UPDATE users SET password = $1, user_email = $2 WHERE user_id = $3', [saltedPassword, email, id]);
 };
 
 const deleteUser = (id) => {
@@ -30,5 +34,6 @@ module.exports = {
     getUserByUsername,
     createUser,
     updateUser,
+    updateUserAndUsername,
     deleteUser
 };
