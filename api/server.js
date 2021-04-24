@@ -4,10 +4,12 @@ const cors = require('cors');
 const users = require('../routes/userRoute.js');
 
 const server = express();
+server.use(express.json());
 server.use(helmet());
 server.use(cors());
 
-server.use('api/users', users);
+server.use('/api/users', users);
+
 server.get('/', (req, res) => {
     res.send('Server is up and running.');
 });
