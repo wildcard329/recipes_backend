@@ -1,5 +1,5 @@
 const users = require('../repository/userRepository.js');
-const functions = require('../helper_functions/authFunctions.js');
+const functions = require('../utils/authFunctions.js');
 
 class UserController {
     static async getUsers() {

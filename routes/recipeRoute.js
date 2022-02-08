@@ -4,7 +4,7 @@ const recipes = require('../controller/recipeController.js');
 router.get('/', async (req, res) => {
     try {
         const results = await recipes.getRecipes();
-        res.status(200).json(results.rows);
+        res.status(200).json(results);
     } catch (err) {
         res.json(err);
     };
@@ -13,21 +13,29 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
     try {
-        const results = await recipes.getRecipeById(id);
-        res.status(200).json(results.rows[0]);
+        let [ recipe, ingredients, instructions ] = await Promise.all([recipes.getRecipeById(id), recipes.getRecipeIngredients(id), recipes.getRecipeInstructions(id)]);
+        const results = { ...recipe, ingredients, instructions }
+        res.status(200).json(results);
     } catch (err) {
         res.status(500).json(err);
     };
 });
 
 router.post('/', async (req, res) => {
-    const {name, description, author, owner, original, image_id} = req.body;
+    const {name, description, userId, prepTime, ingredients, instructions} = req.body;
     try {
-        const recipe_id = await recipes.addRecipe({name, description, author, owner, original, image_id});
-        res.status(201).json(recipe_id)
+        await recipes
+            .addRecipe({name, description, userId, prepTime})
+            .then(async recipeId => {
+                let [ingredientStatus, instructionStatus] = await Promise.all([recipes.addIngredients(ingredients, recipeId), recipes.addInstructions(instructions, recipeId)]);
+                console.log('data ',ingredientStatus, instructionStatus)
+            })  
+            .catch(err => res.send(err))                      
+        res.status(201).send('ok')
     } catch (err) {
-        res.status(500).json(err);
+        res.status(500).json('Error on db');
     };
+
 });
 
 module.exports = router;
