@@ -28,7 +28,6 @@ class RecipeController {
 
     static async addIngredients(ingredientsArray, recipeId) {
         await ingredientsArray.map(async ingredient => {
-            console.log('id is ',recipeId)
             const { quantity, quantity_type, ingredient_name } = ingredient;
             const databaseIngredient = await recipes.getIngredientByName(ingredient_name);
             if (!databaseIngredient.rows[0]) {
