@@ -5,7 +5,7 @@ const getRecipes = () => {
 };
 
 const getRecipeById = (id) => {
-    return db.query('SELECT name, recipe_id as recipeId, user_id as userId, description, prep_time as prepTime FROM recipes WHERE recipe_id = $1', [id]);
+    return db.query('SELECT * FROM recipes WHERE recipe_id = $1', [id]);
 };
 
 const getRecipeIngredients = (id) => {

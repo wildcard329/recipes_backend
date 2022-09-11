@@ -14,7 +14,7 @@ router.get('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
     try {
         let [ recipe, ingredients, instructions ] = await Promise.all([recipes.getRecipeById(id), recipes.getRecipeIngredients(id), recipes.getRecipeInstructions(id)]);
-        const results = { ...recipe, ingredients, instructions }
+        const results = { ...recipe, prepTime: prep_time, ingredients, instructions }
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json(err);
